@@ -6,8 +6,10 @@ type CalendarTime struct {
 	time.Time
 }
 
+const layout = `"2006-01-02T15:04:05"`
+
 func (c *CalendarTime) UnmarshalJSON(b []byte) error {
-	t, err := time.ParseInLocation(`"2006-01-02T15:04:05"`, string(b), time.Local)
+	t, err := time.ParseInLocation(layout, string(b), time.Local)
 	if err != nil {
 		return err
 	}
@@ -17,5 +19,5 @@ func (c *CalendarTime) UnmarshalJSON(b []byte) error {
 }
 
 func (c *CalendarTime) MarshalJSON() ([]byte, error) {
-	return []byte(c.Format(`"2006-01-02T15:04:05"`)), nil
+	return []byte(c.Format(layout)), nil
 }

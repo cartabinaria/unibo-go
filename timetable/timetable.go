@@ -8,8 +8,10 @@ import (
 	"time"
 )
 
-const baseTimetable = "https://corsi.unibo.it/%s/%s/orario-lezioni/@@orario_reale_json?anno=%d"
-const baseTimetableEn = "https://corsi.unibo.it/%s/%s/timetable/@@orario_reale_json?anno=%d"
+var (
+	baseUrl       = "https://corsi.unibo.it"
+	timetablePath = "/%s/%s/%s/@@orario_reale_json?anno=%d"
+)
 
 // Classroom represents a classroom where an event takes place
 type Classroom struct {
@@ -49,14 +51,14 @@ func GetTimetableUrl(
 	year int,
 	interval *Interval,
 ) string {
-	var baseUrl string
+	var orarioLang string
 	if strings.Contains(courseType, "cycle") {
-		baseUrl = baseTimetableEn
+		orarioLang = "timetable"
 	} else {
-		baseUrl = baseTimetable
+		orarioLang = "orario-lezioni"
 	}
 
-	url := fmt.Sprintf(baseUrl, courseType, courseId, year)
+	url := fmt.Sprintf(baseUrl+timetablePath, courseType, courseId, orarioLang, year)
 
 	if curriculum != "" {
 		url += fmt.Sprintf("&curricula=%s", curriculum)
