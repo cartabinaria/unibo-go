@@ -37,7 +37,6 @@ type Event struct {
 type Timetable []Event
 
 // Interval represents an interval of time
-
 type Interval struct {
 	Start time.Time
 	End   time.Time
