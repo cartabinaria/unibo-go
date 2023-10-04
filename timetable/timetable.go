@@ -1,3 +1,18 @@
+/*
+Package timetable provides methods to retrieve the timetable of a degree.
+
+The timetable is retrieved from the University of Bologna's website. In
+particular, every degree has a webpage with the timetable, which is generated
+from a JSON endpoint.
+
+For example, the timetable of the degree "Ingegneria Informatica" is available
+at https://corsi.unibo.it/laurea/IngegneriaInformatica/orario-lezioni and the
+JSON endpoint is available at:
+
+	https://corsi.unibo.it/laurea/IngegneriaInformatica/orario-lezioni/@@orario_reale_json
+
+This package uses the JSON endpoint to retrieve the timetable.
+*/
 package timetable
 
 import (
@@ -19,19 +34,19 @@ type Classroom struct {
 }
 
 type Event struct {
-	CodModulo        string       `json:"cod_modulo"` // The id of the course module
-	CalendarInterval string       `json:"periodo_calendario"`
-	CodSdoppiamento  string       `json:"cod_sdoppiamento"`
-	Title            string       `json:"title"`
-	ExtCode          string       `json:"extCode"`
-	Interval         string       `json:"periodo"`
-	Teacher          string       `json:"docente"`         // The name of the teacher
-	Cfu              int          `json:"cfu"`             // The number of CFU (credits) of the course
-	RemoteLearning   bool         `json:"teledidattica"`   // Whether the course is taught remotely
-	Teams            string       `json:"teams,omitempty"` // The link to the Teams meeting. If the course is not taught remotely, this field is omitted
-	Start            CalendarTime `json:"start"`           // The start time of the event
-	End              CalendarTime `json:"end"`             // The end time of the event
-	Classrooms       []Classroom  `json:"aule"`            // The classrooms where the event takes place
+	CodModulo        string       `json:"cod_modulo"`         // The id of the course module
+	CalendarInterval string       `json:"periodo_calendario"` // The interval of the event in the calendar
+	CodSdoppiamento  string       `json:"cod_sdoppiamento"`   // A code used to identify the lecture, if it is split in multiple parts
+	Title            string       `json:"title"`              // The title of the event
+	ExtCode          string       `json:"extCode"`            // Unused
+	Interval         string       `json:"periodo"`            // The interval of the event
+	Teacher          string       `json:"docente"`            // The name of the teacher
+	Cfu              int          `json:"cfu"`                // The number of CFU (credits) of the course
+	RemoteLearning   bool         `json:"teledidattica"`      // Whether the course is taught remotely
+	Teams            string       `json:"teams,omitempty"`    // The link to the Teams meeting. If the course is not taught remotely, this field is omitted
+	Start            CalendarTime `json:"start"`              // The start time of the event
+	End              CalendarTime `json:"end"`                // The end time of the event
+	Classrooms       []Classroom  `json:"aule"`               // The classrooms where the event takes place
 }
 
 type Timetable []Event

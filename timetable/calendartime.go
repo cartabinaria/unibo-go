@@ -2,6 +2,9 @@ package timetable
 
 import "time"
 
+// CalendarTime is a time.Time that has a custom MarshalJSON and UnmarshalJSON.
+//
+// It is used to parse the timetable, since the endpoint uses a custom format for dates.
 type CalendarTime struct {
 	time.Time
 }
