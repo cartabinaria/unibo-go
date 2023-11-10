@@ -28,11 +28,50 @@ var (
 	timetablePath = "/%s/%s/%s/@@orario_reale_json?anno=%d"
 )
 
-// Classroom represents a classroom where an event takes place
+// Classroom represents a classroom where an event takes place.
 type Classroom struct {
-	Description string `json:"des_risorsa"` // The description of the classroom (e.g. "Classroom 1")
+	ResourceDesc string       `json:"des_risorsa"`  // The description of the classroom (e.g. "Classroom 1")
+	FloorDesc    string       `json:"des_piano"`    // The floor of the classroom
+	BuildingDesc string       `json:"des_edificio"` // The building where the classroom is located
+	Raw          RawClassroom `json:"raw"`
 }
 
+// RawClassroom represents the raw data of a classroom, as returned by the JSON endpoint.
+type RawClassroom struct {
+	Enabled      bool     `json:"enabled"`
+	Active       bool     `json:"active"`
+	Surface      float32  `json:"surface"`
+	Blocked      bool     `json:"blocked"`
+	EditDate     string   `json:"dataModifica"`
+	CreationDate string   `json:"dataCreazione"`
+	Seats        int      `json:"numeroPostazioni"`
+	Description  string   `json:"descrizione"`
+	Building     Building `json:"edificio"`
+}
+
+// Building represents a building where a classroom is located.
+type Building struct {
+	Comune       string `json:"comune"`
+	Via          string `json:"via"`
+	Provincia    string `json:"provincia"`
+	Code         string `json:"codice"`
+	CAP          string `json:"cap"`
+	Description  string `json:"descrizione"`
+	Plesso       string `json:"plesso"`
+	Geo          Geo    `json:"geolocalizzazione"`
+	CreationDate string `json:"dataCreazione"`
+	EditDate     string `json:"dataModifica"`
+}
+
+// Geo represents the geographical coordinates of something.
+type Geo struct {
+	Lat float64 `json:"lat"`
+	Lng float64 `json:"lng"`
+}
+
+// Event represents an event in the timetable.
+//
+// Usually, an event is a lecture, but it can also be a lab.
 type Event struct {
 	CodModulo        string       `json:"cod_modulo"`         // The id of the course module
 	CalendarInterval string       `json:"periodo_calendario"` // The interval of the event in the calendar
@@ -51,7 +90,7 @@ type Event struct {
 
 type Timetable []Event
 
-// Interval represents an interval of time
+// Interval represents an interval of time, from Start to End.
 type Interval struct {
 	Start time.Time
 	End   time.Time

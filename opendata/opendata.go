@@ -9,6 +9,7 @@ import (
 
 const openDataUrl = "https://dati.unibo.it/"
 
+// Resource represents a resource in the UniBO Open Data portal.
 type Resource struct {
 	Frequency string `json:"frequency"`
 	Url       string `json:"url"`
@@ -19,6 +20,7 @@ type Resource struct {
 }
 type Resources []Resource
 
+// Package represents a package in the UniBO Open Data portal.
 type Package struct {
 	Success bool `json:"success"`
 	Result  struct {
@@ -45,6 +47,7 @@ func (r Resources) GetByAlias(alias string) (*Resource, bool) {
 	return nil, false
 }
 
+// getPackageUrl returns the url to fetch the Package with the given id.
 func getPackageUrl(id string) string {
 	return fmt.Sprintf("%s/api/3/action/package_show?id=%s", openDataUrl, id)
 }

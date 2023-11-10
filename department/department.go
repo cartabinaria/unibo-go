@@ -58,6 +58,10 @@ type Department struct {
 	Code string // The code is the subdomain of the department website, e.g. "disi" for "https://disi.unibo.it/it"
 }
 
+// FetchDepartments retrieves the list of departments of the university.
+//
+// It returns a slice of Department and an error. It gets the list from the
+// university website via HTTP and then applies a regex to parse the HTML.
 func FetchDepartments() ([]Department, error) {
 	res, err := http.Get(departmentsUrl)
 	if err != nil {

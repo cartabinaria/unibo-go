@@ -12,7 +12,10 @@ import (
 )
 
 const (
-	PackageDegreeProgrammesId     = "degree-programmes"
+	// PackageDegreeProgrammesId is the id of the package containing the degrees.
+	PackageDegreeProgrammesId = "degree-programmes"
+
+	// ResourceDegreeProgrammesAlias is the alias of the resource containing the degrees.
 	ResourceDegreeProgrammesAlias = "corsi_latest_it"
 )
 

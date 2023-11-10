@@ -85,7 +85,7 @@ func TestFetchTimetable(t *testing.T) {
 
 	if len(timetable[0].Classrooms) != 1 {
 		t.Error("wrong number of classrooms")
-	} else if timetable[0].Classrooms[0].Description != "AULA 6.2" {
+	} else if timetable[0].Classrooms[0].ResourceDesc != "AULA 6.2" {
 		t.Error("wrong Description")
 	}
 }
