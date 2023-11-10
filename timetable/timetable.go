@@ -30,10 +30,11 @@ var (
 
 // Classroom represents a classroom where an event takes place.
 type Classroom struct {
-	ResourceDesc string       `json:"des_risorsa"`  // The description of the classroom (e.g. "Classroom 1")
-	FloorDesc    string       `json:"des_piano"`    // The floor of the classroom
-	BuildingDesc string       `json:"des_edificio"` // The building where the classroom is located
-	Raw          RawClassroom `json:"raw"`
+	ResourceDesc string       `json:"des_risorsa"`   // The description of the classroom (e.g. "Classroom 1")
+	FloorDesc    string       `json:"des_piano"`     // The floor of the classroom
+	BuildingDesc string       `json:"des_edificio"`  // The building where the classroom is located
+	AddressDesc  string       `json:"des_indirizzo"` // The address of the building
+	Raw          RawClassroom `json:"raw"`           // The raw data of the classroom
 }
 
 // RawClassroom represents the raw data of a classroom, as returned by the JSON endpoint.
