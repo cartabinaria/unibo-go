@@ -89,6 +89,7 @@ type Event struct {
 	Classrooms       []Classroom  `json:"aule"`               // The classrooms where the event takes place
 }
 
+// Timetable represents a collection of events.
 type Timetable []Event
 
 // Interval represents an interval of time, from Start to End.

@@ -15,40 +15,11 @@ const (
 
 var (
 	departmentsRegex = regexp.MustCompile("<a class=\"internal-link\" href=\"https://(.+).unibo.it/it\".+>(.+)</a>")
-	teachersRegex    = regexp.MustCompile("<a href=\"https://www.unibo.it/sitoweb/([a-z0-9.]+)\"")
 )
 
 // getDepartmentTeacherUrl returns the URL to fetch the list of teachers for the given department.
 func getDepartmentTeacherUrl(department string) string {
 	return fmt.Sprintf(rootUrl, department) + "?pagesize=" + maxTeachers
-}
-
-// FetchTeachers retrieves the list of teachers for the given department.
-func FetchTeachers(departmentCode string) ([]Teacher, error) {
-	url := getDepartmentTeacherUrl(departmentCode)
-
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var teachers []Teacher
-	matches := teachersRegex.FindAllSubmatch(body, -1)
-	for _, match := range matches {
-		teachers = append(teachers, Teacher{Username: string(match[1])})
-	}
-
-	err = res.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	return teachers, nil
 }
 
 // Department represents a department of the university.
@@ -60,8 +31,8 @@ type Department struct {
 
 // FetchDepartments retrieves the list of departments of the university.
 //
-// It returns a slice of Department and an error. It gets the list from the
-// university website via HTTP and then applies a regex to parse the HTML.
+// It gets the list from the university website via HTTP and then applies a regex
+// to parse the HTML.
 func FetchDepartments() ([]Department, error) {
 	res, err := http.Get(departmentsUrl)
 	if err != nil {
@@ -69,6 +40,11 @@ func FetchDepartments() ([]Department, error) {
 	}
 
 	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	err = res.Body.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -81,11 +57,6 @@ func FetchDepartments() ([]Department, error) {
 
 		dep := Department{Code: code, Name: name, Url: "https://" + code + ".unibo.it/it"}
 		deps = append(deps, dep)
-	}
-
-	err = res.Body.Close()
-	if err != nil {
-		return nil, err
 	}
 
 	return deps, nil
