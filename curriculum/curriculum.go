@@ -1,3 +1,5 @@
+// Package curriculum contains functions to fetch curricula from the unibo
+// website
 package curriculum
 
 import (
@@ -7,15 +9,19 @@ import (
 	"strings"
 )
 
-const baseCurriculaIt = "https://corsi.unibo.it/%s/%s/orario-lezioni/@@available_curricula?anno=%d&curricula="
-const baseCurriculaEn = "https://corsi.unibo.it/%s/%s/timetable/@@available_curricula?anno=%d&curricula="
+const (
+	baseCurriculaIt = "https://corsi.unibo.it/%s/%s/orario-lezioni/@@available_curricula?anno=%d&curricula="
+	baseCurriculaEn = "https://corsi.unibo.it/%s/%s/timetable/@@available_curricula?anno=%d&curricula="
+)
 
-type Curriculum struct {
-	Selected bool   `json:"selected"`
-	Value    string `json:"value"`
-	Label    string `json:"label"`
-}
-type Curricula []Curriculum
+type (
+	Curriculum struct {
+		Selected bool   `json:"selected"`
+		Value    string `json:"value"`
+		Label    string `json:"label"`
+	}
+	Curricula []Curriculum
+)
 
 func GetCurriculaUrl(courseType, courseId string, year int) string {
 	if strings.Contains(courseType, "cycle") {

@@ -12,9 +12,7 @@ type Teacher struct {
 }
 
 // GetWebsite returns the website of the teacher.
-func (t Teacher) GetWebsite() string {
-	return "https://www.unibo.it/sitoweb/" + t.Username
-}
+func (t Teacher) GetWebsite() string { return "https://www.unibo.it/sitoweb/" + t.Username }
 
 var teachersRegex = regexp.MustCompile("<a href=\"https://www.unibo.it/sitoweb/([a-z0-9.]+)\"")
 

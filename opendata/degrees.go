@@ -15,17 +15,20 @@ const (
 	// PackageDegreeProgrammesId is the id of the package containing the degrees.
 	PackageDegreeProgrammesId = "degree-programmes"
 
-	// ResourceDegreeProgrammesAlias is the alias of the resource containing the degrees.
+	// ResourceDegreeProgrammesAlias is the alias of the resource containing the
+	// degrees.
 	ResourceDegreeProgrammesAlias = "corsi_latest_it"
 )
 
-// GetDegrees fetches and returns the degrees available in the open data.
+// GetDegrees fetches and returns the degrees available in the open data for the
+// current year.
 //
-// Internally it uses PackageDegreeProgrammesId and ResourceDegreeProgrammesAlias constants
-// to get the wanted package and resource and then parses the csv file to get the degrees.
+// Internally it uses PackageDegreeProgrammesId and ResourceDegreeProgrammesAlias
+// constants to get the wanted package and resource and then parses the csv file
+// to get the degrees.
 //
-// If you'd like to get the package and resource yourself (maybe you want to download the csv file),
-// you can use FetchPackage and Resources.GetByAlias.
+// If you'd like to get the package and resource yourself (maybe you want to
+// download the csv file), you can use FetchPackage and Resources.GetByAlias.
 func GetDegrees() ([]degree.Degree, error) {
 	// Get package
 	pack, err := FetchPackage(PackageDegreeProgrammesId)

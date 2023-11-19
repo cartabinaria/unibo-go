@@ -1,3 +1,7 @@
+// Package opendata provides functions to fetch data from the UniBo Open Data
+// portal.
+//
+// It is useful in particular to get degrees (see GetDegrees).
 package opendata
 
 import (
@@ -6,8 +10,6 @@ import (
 	"net/http"
 	"strings"
 )
-
-const openDataUrl = "https://dati.unibo.it/"
 
 // Resource represents a resource in the UniBO Open Data portal.
 type Resource struct {
@@ -46,6 +48,8 @@ func (r Resources) GetByAlias(alias string) (*Resource, bool) {
 	}
 	return nil, false
 }
+
+const openDataUrl = "https://dati.unibo.it/"
 
 // getPackageUrl returns the url to fetch the Package with the given id.
 func getPackageUrl(id string) string {
