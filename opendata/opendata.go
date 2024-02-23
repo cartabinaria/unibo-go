@@ -49,7 +49,7 @@ func (r Resources) GetByAlias(alias string) (*Resource, bool) {
 	return nil, false
 }
 
-const openDataUrl = "https://dati.unibo.it/"
+const openDataUrl = "https://dati.unibo.it"
 
 // getPackageUrl returns the url to fetch the Package with the given id.
 func getPackageUrl(id string) string {
