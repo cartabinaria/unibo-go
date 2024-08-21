@@ -157,3 +157,24 @@ func FetchTimetable(
 
 	return
 }
+
+type SimpleSubject struct {
+	Name string
+	Code string
+}
+
+func (t Timetable) GetSubjects() (teachings []SimpleSubject) {
+	m := make(map[string]string)
+	for _, e := range t {
+		m[e.CodModulo] = e.Title
+	}
+
+	for c, n := range m {
+		teachings = append(teachings, SimpleSubject{
+			Name: n,
+			Code: c,
+		})
+	}
+
+	return
+}
