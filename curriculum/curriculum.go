@@ -5,6 +5,7 @@ package curriculum
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -39,7 +40,16 @@ func FetchCurricula(courseType, courseId string, year int) (curricula Curricula,
 		return nil, err
 	}
 
-	err = json.NewDecoder(res.Body).Decode(&curricula)
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if strings.Contains(string(body), "error") {
+		return nil, fmt.Errorf("Unibo website returned an error for url: %s", url)
+	}
+
+	err = json.Unmarshal(body, &curricula)
 	if err != nil {
 		return nil, err
 	}
