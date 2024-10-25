@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/csunibo/unibo-go/degree"
+	"github.com/cartabinaria/unibo-go/degree"
 )
 
 const (

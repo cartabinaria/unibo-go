@@ -3,8 +3,8 @@
 package degree
 
 import (
-	"github.com/csunibo/unibo-go/curriculum"
-	"github.com/csunibo/unibo-go/timetable"
+	"github.com/cartabinaria/unibo-go/curriculum"
+	"github.com/cartabinaria/unibo-go/timetable"
 )
 
 // Degree represents a degree course.
