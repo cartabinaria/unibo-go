@@ -2,10 +2,10 @@ package exams
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/antchfx/htmlquery"
@@ -16,7 +16,7 @@ var (
 )
 
 type Exam struct {
-	SubjectCode   int
+	SubjectCode   string
 	SubjectName   string
 	Teacher       string
 	Date          string
@@ -31,49 +31,82 @@ func GetExams(courseType, courseId string) ([]Exam, error) {
 	return GetExamsForSubject(courseType, courseId, "")
 }
 
+// subjectsPerPage is the number of subjects that are shown per page on the website
+const subjectsPerPage = 20
+
 func GetExamsForSubject(courseType, courseId, subjectName string) ([]Exam, error) {
-	url := fmt.Sprintf(baseUrl, courseType, courseId)
-	if subjectName != "" {
-		url = fmt.Sprintf("%s?appelli=%s", url, subjectName)
-	}
+	var exams []Exam
 
-	document, err := http.Get(url)
-	if err != nil {
-		return nil, fmt.Errorf("unable to fetch exams from url %s: %w", url, err)
-	}
+	start := 0
+	for {
+		url := fmt.Sprintf(baseUrl, courseType, courseId)
 
-	defer func() {
-		if err := document.Body.Close(); err != nil {
-			fmt.Fprintf(os.Stderr, "unable to close response body: %v", err)
+		// if we are looking for a specific subject, we need to specify the appelli parameter
+		if subjectName != "" {
+			url = fmt.Sprintf("%s?appelli=%s", url, subjectName)
 		}
-	}()
 
-	node, err := htmlquery.Parse(document.Body)
+		// if we are not at the first page, we need to specify the start parameter
+		if start > 1 {
+			url = fmt.Sprintf("%s?b_start:int=%d", url, start)
+		}
+
+		document, err := http.Get(url)
+		if err != nil {
+			return nil, fmt.Errorf("unable to fetch exams from url %s: %w", url, err)
+		}
+
+		defer func() {
+			if err := document.Body.Close(); err != nil {
+				fmt.Fprintf(os.Stderr, "unable to close response body: %v", err)
+			}
+		}()
+
+		e, err := parseExamsHtml(document.Body)
+		if err != nil {
+			return nil, fmt.Errorf("unable to parse exams from url %s: %w", url, err)
+		}
+
+		if len(e) == 0 { // no more exams
+			break
+		}
+		start += subjectsPerPage
+		exams = append(exams, e...)
+	}
+
+	return exams, nil
+}
+
+func parseExamsHtml(r io.Reader) ([]Exam, error) {
+	node, err := htmlquery.Parse(r)
 	if err != nil {
 		return nil, fmt.Errorf("unable to load url: %w", err)
 	}
 
-	subjNodes := htmlquery.Find(node, "//div[@role='tablist']")
+	tabs := htmlquery.Find(node, "//h3[@role='tab']")
+	panels := htmlquery.Find(node, "//div[@role='tabpanel']")
+
+	if len(tabs) != len(panels) {
+		return nil, fmt.Errorf("unable to find the same number of tab panels and tabs while parsing exams. maybe the html structure has changed")
+	}
 
 	exams := make([]Exam, 0)
 
-	for _, appelloNode := range subjNodes {
+	for i := 0; i < len(tabs); i++ {
 
-		subjNode := htmlquery.FindOne(appelloNode, "//h3/a[@class='openclose-appelli']")
+		panelNode := tabs[i]
+
+		subjNode := htmlquery.FindOne(panelNode, "/a")
 		if subjNode == nil {
 			return nil, fmt.Errorf("unable to find subject while parsing exams. maybe the html structure has changed")
 		}
 
-		subjCodeNode := htmlquery.FindOne(subjNode, "//span[@class='code']")
+		subjCodeNode := htmlquery.FindOne(panelNode, "//span[@class='code']")
 		if subjCodeNode == nil {
 			return nil, fmt.Errorf("unable to find code while parsing exams. maybe the html structure has changed")
 		}
 
 		subjCodeStr := htmlquery.InnerText(subjCodeNode)
-		subjCode, err := strconv.Atoi(subjCodeStr)
-		if err != nil {
-			return nil, fmt.Errorf("unable to convert code to int: %w", err)
-		}
 
 		subjTeacherNode := htmlquery.FindOne(subjNode, "//span[@class='docente']")
 		if subjTeacherNode == nil {
@@ -89,7 +122,9 @@ func GetExamsForSubject(courseType, courseId, subjectName string) ([]Exam, error
 		title = duplicatedSpaceRemover.ReplaceAllString(title, " ")
 		title = strings.TrimSpace(title)
 
-		examsNodes := htmlquery.Find(appelloNode, "//table[@class='single-item']")
+		tabNode := panels[i]
+
+		examsNodes := htmlquery.Find(tabNode, "/table")
 		if len(examsNodes) == 0 {
 			return nil, fmt.Errorf("unable to find exams while parsing exams. maybe the html structure has changed")
 		}
@@ -101,6 +136,8 @@ func GetExamsForSubject(courseType, courseId, subjectName string) ([]Exam, error
 				return nil, fmt.Errorf("unable to find date while parsing exams. maybe the html structure has changed")
 			}
 			date := htmlquery.InnerText(dateNode)
+			date = spaceRemover.Replace(date)
+			date = duplicatedSpaceRemover.ReplaceAllString(date, " ")
 			date = strings.TrimSpace(date)
 
 			listaIscrizioniNode := htmlquery.FindOne(examNode, "//tr[2]/td[1]")
@@ -108,6 +145,8 @@ func GetExamsForSubject(courseType, courseId, subjectName string) ([]Exam, error
 				return nil, fmt.Errorf("unable to find lista iscrizioni while parsing exams. maybe the html structure has changed")
 			}
 			listaIscrizioni := htmlquery.InnerText(listaIscrizioniNode)
+			listaIscrizioni = spaceRemover.Replace(listaIscrizioni)
+			listaIscrizioni = duplicatedSpaceRemover.ReplaceAllString(listaIscrizioni, " ")
 			listaIscrizioni = strings.TrimSpace(listaIscrizioni)
 
 			tipoProvaNode := htmlquery.FindOne(examNode, "//tr[3]/td[1]")
@@ -125,7 +164,7 @@ func GetExamsForSubject(courseType, courseId, subjectName string) ([]Exam, error
 			luogo = strings.TrimSpace(luogo)
 
 			exam := Exam{
-				SubjectCode:   subjCode,
+				SubjectCode:   subjCodeStr,
 				SubjectName:   title,
 				Teacher:       subjTeacher,
 				Date:          date,
