@@ -4,6 +4,7 @@ package degree
 
 import (
 	"github.com/cartabinaria/unibo-go/curriculum"
+	"github.com/cartabinaria/unibo-go/exams"
 	"github.com/cartabinaria/unibo-go/timetable"
 )
 
@@ -120,4 +121,12 @@ func (d *Degree) fillId() error {
 
 	d.id = id
 	return nil
+}
+
+func (d *Degree) Exams() ([]exams.Exam, error) {
+	return exams.GetExams(d.id.Type, d.id.Id)
+}
+
+func (d *Degree) ExamsForSubject(subjectName string) ([]exams.Exam, error) {
+	return exams.GetExamsForSubject(d.id.Type, d.id.Id, subjectName)
 }
