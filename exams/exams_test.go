@@ -12,6 +12,11 @@ func TestGetExams(t *testing.T) {
 	// Mock server to simulate the Unibo website
 	handler := http.NewServeMux()
 	handler.HandleFunc("/unibo/test/appelli", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Has("b_start:int") {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`
 <div class=dropdown-component role=tablist>
@@ -92,14 +97,14 @@ func TestGetExams(t *testing.T) {
 	assert.NotNil(t, exams)
 	assert.Equal(t, 4, len(exams))
 
-	assert.Equal(t, 72677, exams[0].SubjectCode)
+	assert.Equal(t, "72677", exams[0].SubjectCode)
 	assert.Equal(t, "ANALISI DELLE RETI SOCIALI APPLICATA AD INTERNET", exams[0].SubjectName)
 	assert.Equal(t, "06 dicembre 2024 ore 09:00", exams[0].Date)
 	assert.Equal(t, "aperta dal 18 ottobre 2024 al 05 dicembre 2024", exams[0].Subscriptions)
 	assert.Equal(t, "Scritto", exams[0].Type)
 	assert.Equal(t, "ONLINE", exams[0].Location)
 
-	assert.Equal(t, 72677, exams[1].SubjectCode)
+	assert.Equal(t, "72677", exams[1].SubjectCode)
 	assert.Equal(t, "ANALISI DELLE RETI SOCIALI APPLICATA AD INTERNET", exams[1].SubjectName)
 	assert.Equal(t, "10 gennaio 2025 ore 09:00", exams[1].Date)
 	assert.Equal(t, "aperta dal 26 dicembre 2024 al 09 gennaio 2025", exams[1].Subscriptions)
