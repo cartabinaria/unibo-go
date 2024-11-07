@@ -137,25 +137,26 @@ func FetchTimetable(
 	courseType, courseId, curriculum string,
 	year int,
 	interval *Interval,
-) (timetable Timetable, err error) {
+) (Timetable, error) {
 	url := GetTimetableUrl(courseType, courseId, curriculum, year, interval)
 
 	res, err := http.Get(url)
 	if err != nil {
-		return
+		return nil, fmt.Errorf("failed to fetch timetable: %w", err)
 	}
 
+	var timetable Timetable
 	err = json.NewDecoder(res.Body).Decode(&timetable)
 	if err != nil {
-		return
+		return nil, fmt.Errorf("failed to decode timetable: %w", err)
 	}
 
 	err = res.Body.Close()
 	if err != nil {
-		return
+		return nil, fmt.Errorf("failed to close response body: %w", err)
 	}
 
-	return
+	return timetable, nil
 }
 
 type SimpleSubject struct {
