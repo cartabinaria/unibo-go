@@ -1,10 +1,13 @@
 module github.com/cartabinaria/unibo-go
 
-go 1.20
+go 1.21
+
+toolchain go1.23.4
 
 require (
 	github.com/antchfx/htmlquery v1.3.3
 	github.com/fatih/color v1.18.0
+	github.com/karlseguin/ccache/v3 v3.0.6
 	github.com/spf13/cobra v1.8.1
 )
 
