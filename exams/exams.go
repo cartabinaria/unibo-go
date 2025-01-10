@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/antchfx/htmlquery"
 )
@@ -19,7 +20,7 @@ type Exam struct {
 	SubjectCode   string
 	SubjectName   string
 	Teacher       string
-	Date          string
+	Date          time.Time
 	Type          string
 	Location      string
 	Subscriptions string
@@ -129,6 +130,13 @@ func parseExamsHtml(r io.Reader) ([]Exam, error) {
 			return nil, fmt.Errorf("unable to find exams while parsing exams. maybe the html structure has changed")
 		}
 
+		cleanText := func(text string) string {
+			text = spaceRemover.Replace(text)
+			text = duplicatedSpaceRemover.ReplaceAllString(text, " ")
+			text = strings.TrimSpace(text)
+			return text
+		}
+
 		for _, examNode := range examsNodes {
 
 			dateNode := htmlquery.FindOne(examNode, "//tr[1]/td[1]")
@@ -136,38 +144,39 @@ func parseExamsHtml(r io.Reader) ([]Exam, error) {
 				return nil, fmt.Errorf("unable to find date while parsing exams. maybe the html structure has changed")
 			}
 			date := htmlquery.InnerText(dateNode)
-			date = spaceRemover.Replace(date)
-			date = duplicatedSpaceRemover.ReplaceAllString(date, " ")
-			date = strings.TrimSpace(date)
+			date = cleanText(date)
 
 			listaIscrizioniNode := htmlquery.FindOne(examNode, "//tr[2]/td[1]")
 			if listaIscrizioniNode == nil {
 				return nil, fmt.Errorf("unable to find lista iscrizioni while parsing exams. maybe the html structure has changed")
 			}
 			listaIscrizioni := htmlquery.InnerText(listaIscrizioniNode)
-			listaIscrizioni = spaceRemover.Replace(listaIscrizioni)
-			listaIscrizioni = duplicatedSpaceRemover.ReplaceAllString(listaIscrizioni, " ")
-			listaIscrizioni = strings.TrimSpace(listaIscrizioni)
+			listaIscrizioni = cleanText(listaIscrizioni)
 
 			tipoProvaNode := htmlquery.FindOne(examNode, "//tr[3]/td[1]")
 			if tipoProvaNode == nil {
 				return nil, fmt.Errorf("unable to find tipo prova while parsing exams. maybe the html structure has changed")
 			}
 			tipoProva := htmlquery.InnerText(tipoProvaNode)
-			tipoProva = strings.TrimSpace(tipoProva)
+			tipoProva = cleanText(tipoProva)
 
 			luogoNode := htmlquery.FindOne(examNode, "//tr[4]/td[1]")
 			if luogoNode == nil {
 				return nil, fmt.Errorf("unable to find luogo while parsing exams. maybe the html structure has changed")
 			}
 			luogo := htmlquery.InnerText(luogoNode)
-			luogo = strings.TrimSpace(luogo)
+			luogo = cleanText(luogo)
+
+			parsedDate, err := ParseItalianDate(date)
+			if err != nil {
+				return nil, fmt.Errorf("unable to parse date '%s': %w", date, err)
+			}
 
 			exam := Exam{
 				SubjectCode:   subjCodeStr,
 				SubjectName:   title,
 				Teacher:       subjTeacher,
-				Date:          date,
+				Date:          parsedDate,
 				Type:          tipoProva,
 				Location:      luogo,
 				Subscriptions: listaIscrizioni,
@@ -178,4 +187,43 @@ func parseExamsHtml(r io.Reader) ([]Exam, error) {
 	}
 
 	return exams, nil
+}
+
+// ParseItalianDate parses a date string in the format "mese anno ore hh:mm" (e.g., "febbraio 2025 ore 09:30")
+// and returns a time.Time object.
+func ParseItalianDate(input string) (time.Time, error) {
+	// Map Italian months to their English counterparts
+	months := map[string]string{
+		"gennaio":   "January",
+		"febbraio":  "February",
+		"marzo":     "March",
+		"aprile":    "April",
+		"maggio":    "May",
+		"giugno":    "June",
+		"luglio":    "July",
+		"agosto":    "August",
+		"settembre": "September",
+		"ottobre":   "October",
+		"novembre":  "November",
+		"dicembre":  "December",
+	}
+
+	// Replace Italian month with English month
+	for italian, english := range months {
+		if strings.Contains(input, italian) {
+			input = strings.Replace(input, italian, english, 1)
+			break
+		}
+	}
+
+	// Replace "ore" with space for compatibility
+	input = strings.Replace(input, "ore ", "", 1)
+
+	// Parse the time
+	parsedTime, err := time.Parse("02 January 2006 15:04", strings.TrimSpace(input))
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return parsedTime, nil
 }

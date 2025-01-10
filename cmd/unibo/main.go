@@ -6,13 +6,13 @@ var rootCmd = &cobra.Command{
 	Use:   "unibo",
 	Short: "A CLI to interact with the University of Bologna",
 
-	Run: rootRun,
+	RunE: rootRun,
 }
 
 func main() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
-func rootRun(cmd *cobra.Command, args []string) {
-	cmd.Help()
+func rootRun(cmd *cobra.Command, _ []string) error {
+	return cmd.Help()
 }

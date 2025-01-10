@@ -5,29 +5,28 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cartabinaria/unibo-go/timetable"
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+
+	"github.com/cartabinaria/unibo-go/timetable"
 )
 
 var cmdTimetable = &cobra.Command{
-	Use:     "timetable",
+	Use:     "timetable courseType courseId year [curriculum]",
 	Short:   "fetches the timetable of a degree course",
-	Args:    cobra.RangeArgs(3, 4),
-	Aliases: []string{"t"},
-	Run:     runTimetable,
+	Example: "unibo timetable laurea informatica 1",
+	Aliases: []string{"t", "tt"},
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 3 {
+			return fmt.Errorf("requires at least 3 arguments")
+		}
+		return nil
+	},
+	Run: runTimetable,
 }
 
 func init() {
 	rootCmd.AddCommand(cmdTimetable)
 }
-
-var (
-	yellowFmt = color.New(color.FgYellow).SprintFunc()
-	greenFmt  = color.New(color.FgGreen).SprintFunc()
-	redFmt    = color.New(color.FgRed).SprintFunc()
-	grayFmt   = color.New(color.Faint).SprintFunc()
-)
 
 func runTimetable(cmd *cobra.Command, args []string) {
 
@@ -37,7 +36,8 @@ func runTimetable(cmd *cobra.Command, args []string) {
 
 	year64, err := strconv.ParseInt(yearStr, 10, 32)
 	if err != nil {
-		cmd.PrintErrln(fmt.Errorf("year must be a number"))
+		Errorln("year must be a number")
+		cmd.Help()
 		return
 	}
 
@@ -53,17 +53,17 @@ func runTimetable(cmd *cobra.Command, args []string) {
 	interval := &timetable.Interval{Start: today, End: today}
 	tt, err := timetable.FetchTimetable(courseType, courseId, curriculum, year, interval)
 	if err != nil {
-		cmd.PrintErrln(fmt.Errorf("error fetching timetable: %v", err))
+		Errorf("error fetching timetable: %v\n", err)
 		return
 	}
 
 	if len(tt) == 0 {
-		cmd.Println(yellowFmt("No lessons found"))
+		fmt.Println(yellowFmt("No lessons found\n"))
 		return
 	}
 
 	for _, e := range tt {
-		cmd.Printf("- %s -> %s: %-50s %-30s (%s)\n",
+		fmt.Printf("- %s -> %s: %-50s %-30s (%s)\n",
 			greenFmt(e.Start.Format("15:04")), redFmt(e.End.Format("15:04")),
 			e.Title, yellowFmt(e.Teacher), grayFmt(e.CodModulo))
 	}
