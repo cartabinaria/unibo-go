@@ -219,8 +219,13 @@ func ParseItalianDate(input string) (time.Time, error) {
 	// Replace "ore" with space for compatibility
 	input = strings.Replace(input, "ore ", "", 1)
 
+	timezone, err := time.LoadLocation("Europe/Rome")
+	if err != nil {
+		return time.Time{}, fmt.Errorf("could not load italian timezone: %w", err)
+	}
+
 	// Parse the time
-	parsedTime, err := time.Parse("02 January 2006 15:04", strings.TrimSpace(input))
+	parsedTime, err := time.ParseInLocation("02 January 2006 15:04", strings.TrimSpace(input), timezone)
 	if err != nil {
 		return time.Time{}, err
 	}

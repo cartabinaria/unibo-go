@@ -98,16 +98,19 @@ func TestGetExams(t *testing.T) {
 	assert.NotNil(t, exams)
 	assert.Equal(t, 4, len(exams))
 
+	timezone, err := time.LoadLocation("Europe/Rome")
+	assert.NoError(t, err)
+
 	assert.Equal(t, "72677", exams[0].SubjectCode)
 	assert.Equal(t, "ANALISI DELLE RETI SOCIALI APPLICATA AD INTERNET", exams[0].SubjectName)
-	assert.Equal(t, time.Date(2024, time.December, 06, 9, 0, 0, 0, time.UTC), exams[0].Date)
+	assert.Equal(t, time.Date(2024, time.December, 06, 9, 0, 0, 0, timezone), exams[0].Date)
 	assert.Equal(t, "aperta dal 18 ottobre 2024 al 05 dicembre 2024", exams[0].Subscriptions)
 	assert.Equal(t, "Scritto", exams[0].Type)
 	assert.Equal(t, "ONLINE", exams[0].Location)
 
 	assert.Equal(t, "72677", exams[1].SubjectCode)
 	assert.Equal(t, "ANALISI DELLE RETI SOCIALI APPLICATA AD INTERNET", exams[1].SubjectName)
-	assert.Equal(t, time.Date(2025, time.January, 10, 9, 0, 0, 0, time.UTC), exams[1].Date)
+	assert.Equal(t, time.Date(2025, time.January, 10, 9, 0, 0, 0, timezone), exams[1].Date)
 	assert.Equal(t, "aperta dal 26 dicembre 2024 al 09 gennaio 2025", exams[1].Subscriptions)
 	assert.Equal(t, "Scritto", exams[1].Type)
 	assert.Equal(t, "ONLINE", exams[1].Location)
