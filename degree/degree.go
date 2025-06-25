@@ -12,8 +12,8 @@ import (
 //
 // It can be obtained from UniBo's open data. See the opendata package for more information.
 type Degree struct {
+	Code                  string // The code of the course
 	AcademicYear          string // The academic year in which the course is taught
-	Code                  int    // The code of the course
 	Description           string // The description of the course
 	Url                   string // The url of the course website
 	Campus                string // The campus where the course is taught

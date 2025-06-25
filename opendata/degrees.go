@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/cartabinaria/unibo-go/ckan"
 	"github.com/cartabinaria/unibo-go/degree"
 )
 
@@ -31,24 +32,24 @@ const (
 // download the csv file), you can use FetchPackage and Resources.GetByAlias.
 func GetDegrees() ([]degree.Degree, error) {
 	// Get package
-	pack, err := FetchPackage(PackageDegreeProgrammesId)
+	pack, err := ckanClient.GetPackage(PackageDegreeProgrammesId)
 	if err != nil {
 		return nil, err
 	}
 
 	// If no resources, return nil
-	if len(pack.Result.Resources) == 0 {
+	if len(pack.Resources) == 0 {
 		return nil, errors.New("no resources found while downloading degrees open data")
 	}
 
 	// Get wanted resource
-	resource, found := pack.Result.Resources.GetByAlias(ResourceDegreeProgrammesAlias)
+	resource, found := ckan.GetByAlias(pack.Resources, ResourceDegreeProgrammesAlias)
 	if !found {
 		return nil, errors.New("unable to find resource '" + ResourceDegreeProgrammesAlias + "'")
 	}
 
 	// Get the resource
-	res, err := http.Get(resource.Url)
+	res, err := http.Get(resource.URL)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get resource: %w", err)
 	} else if res.Header.Get("Content-Type") != "text/csv" {
@@ -77,10 +78,7 @@ func GetDegrees() ([]degree.Degree, error) {
 			return nil, fmt.Errorf("unexpected number of fields: %d (the website has changed?)", len(row))
 		}
 
-		code, err := strconv.ParseInt(row[2], 10, 32)
-		if err != nil {
-			return nil, fmt.Errorf("unable to parse field 'code': %w", err)
-		}
+		degreeCode := row[2]
 
 		years, err := strconv.ParseInt(row[9], 10, 32)
 		if err != nil {
@@ -95,7 +93,7 @@ func GetDegrees() ([]degree.Degree, error) {
 		degrees = append(degrees, degree.Degree{
 			AcademicYear:          row[0],
 			OpenForRegistration:   row[1],
-			Code:                  int(code),
+			Code:                  degreeCode,
 			Description:           row[3],
 			Url:                   row[4],
 			Campus:                row[5],
