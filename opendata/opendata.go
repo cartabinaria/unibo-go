@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"slices"
 	"strings"
 )
 
@@ -40,10 +41,8 @@ func (r Resources) GetByAlias(alias string) (*Resource, bool) {
 		rAliases := strings.Split(resource.Alias, ", ")
 
 		// Check if the alias is one of the aliases of the resource
-		for _, rAlias := range rAliases {
-			if rAlias == alias {
-				return &resource, true
-			}
+		if slices.Contains(rAliases, alias) {
+			return &resource, true
 		}
 	}
 	return nil, false
