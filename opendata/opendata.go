@@ -4,6 +4,8 @@
 
 // Package opendata provides functions to fetch data from the UniBo Open Data
 // portal.
+//
+// Internally it uses the ckan package to interact with the CKAN API that dati.unibo.it offers.
 package opendata
 
 import "github.com/cartabinaria/unibo-go/ckan"

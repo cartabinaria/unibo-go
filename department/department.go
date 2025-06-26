@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+// Package department provides functionality to fetch university departments and their teachers.
 package department
 
 import (

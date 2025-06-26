@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+// Package rubrica provides functionality to search for contacts in the university's directory.
 package rubrica
 
 import (

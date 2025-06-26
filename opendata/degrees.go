@@ -18,26 +18,15 @@ import (
 )
 
 const (
-	// PackageDegreeProgrammesId is the id of the package containing the degrees.
-	PackageDegreeProgrammesId = "degree-programmes"
-
-	// ResourceDegreeProgrammesAlias is the alias of the resource containing the
-	// degrees.
-	ResourceDegreeProgrammesAlias = "corsi_latest_it"
+	packageDegreeProgrammesId     = "degree-programmes" // the id of the package containing the degrees
+	resourceDegreeProgrammesAlias = "corsi_latest_it"   // the alias of the resource containing the degrees
 )
 
 // GetDegrees fetches and returns the degrees available in the open data for the
 // current year.
-//
-// Internally it uses PackageDegreeProgrammesId and ResourceDegreeProgrammesAlias
-// constants to get the wanted package and resource and then parses the csv file
-// to get the degrees.
-//
-// If you'd like to get the package and resource yourself (maybe you want to
-// download the csv file), you can use FetchPackage and Resources.GetByAlias.
 func GetDegrees() ([]degree.Degree, error) {
 	// Get package
-	pack, err := ckanClient.GetPackage(PackageDegreeProgrammesId)
+	pack, err := ckanClient.GetPackage(packageDegreeProgrammesId)
 	if err != nil {
 		return nil, err
 	}
@@ -48,9 +37,9 @@ func GetDegrees() ([]degree.Degree, error) {
 	}
 
 	// Get wanted resource
-	resource, found := ckan.GetByAlias(pack.Resources, ResourceDegreeProgrammesAlias)
+	resource, found := ckan.GetByAlias(pack.Resources, resourceDegreeProgrammesAlias)
 	if !found {
-		return nil, errors.New("unable to find resource '" + ResourceDegreeProgrammesAlias + "'")
+		return nil, errors.New("unable to find resource '" + resourceDegreeProgrammesAlias + "'")
 	}
 
 	// Get the resource
