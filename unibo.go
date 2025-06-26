@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: MIT
+
 /*
 Package unibo provides a wrapper around the APIs of the University of Bologna.
 

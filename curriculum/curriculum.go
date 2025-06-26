@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
 // SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+//
+// SPDX-License-Identifier: MIT
 
 // Package curriculum contains functions to fetch curricula from the unibo
 // website

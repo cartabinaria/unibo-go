@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+//
+// SPDX-License-Identifier: MIT
+
 // Package degree provides a type to represent a degree course and related
 // functions to fetch data from the unibo website.
 package degree

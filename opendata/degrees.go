@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+//
+// SPDX-License-Identifier: MIT
+
 package opendata
 
 import (

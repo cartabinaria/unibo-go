@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2024 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
+//
+// SPDX-License-Identifier: MIT
+
 package exams
 
 import (

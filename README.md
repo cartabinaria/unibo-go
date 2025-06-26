@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Stefano Volpe <foxy@teapot.ovh>
+SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+
+SPDX-License-Identifier: MIT
+-->
+
 # Unibo Go
 
 `unibo` (Unibo Go) è un involucro per le API di [unibo.it](https://unibo.it).

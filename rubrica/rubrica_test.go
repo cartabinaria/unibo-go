@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: MIT
+
 package rubrica
 
 import (
@@ -26,7 +30,7 @@ func TestSearch(t *testing.T) {
 	UniboRubrica - Università di Bologna
 </title></head>
 
-<!-- 
+<!--
 Server: WCSP-TWEB-01
 Cached At : 16:25:54
  -->
@@ -34,38 +38,38 @@ Cached At : 16:25:54
 
 <body>
     <div id="page">
-    
+
         <!--MAIN NAVIGATION-->
-        
+
 
 
 
 <div id="mainNavigation">
-   
-    
+
+
         <h1 class="hidden">Rubrica</h1>
-    
+
 
     <div id="usBar">
         <ul>
             <li>
-                
+
                 <a id="Header1_WebLink" accesskey="r" href="/uniboweb/unibosearch/default.aspx">Web Unibo</a>
              </li>
-             
+
              <li>
-                
+
                     <strong>Rubrica</strong>
-                
-                
+
+
              </li>
-             
+
              <li>
-                
+
                 <a id="Header1_MappeLink" accesskey="g" href="/uniboWeb/unibomappe/default.aspx">Mappe</a>
              </li>
-             
-             
+
+
         </ul>
     </div>
 
@@ -76,49 +80,49 @@ Cached At : 16:25:54
             <strong></strong> <a id="Header1_LoginLink" accesskey="l" href="/uniboweb/SignIn.aspx?ReturnUrl=%2funiboweb%2funibosearch%2frubrica.aspx%3ftab%3dPersonePanel%26mode%3dpeople%26query%3d%252bnome%253aantonio%2b%252bcognome%253acorradi">Login</a></li>
             <li><a id="Header1_PortaleLink" href="https://www.unibo.it/it">Portale di Ateneo</a></li>
             <li><a id="Header1_GuidaLink" href="/uniboweb/unibosearch/Guida.aspx">?</a></li>
-            
-            
-            
+
+
+
                 <li><a id="Header1_LangEn" accesskey="e" href="/uniboweb/unibosearch/rubrica.aspx?tab=PersonePanel&amp;mode=people&amp;query=%2bnome%3aantonio+%2bcognome%3acorradi&amp;lang=en">EN</a></li>
-            
+
         </ul>
     </div>
-    
-    
+
+
     <div class="clearBoth"></div>
 </div>
 
-        
-        
+
+
         <!--HEADER-->
         <div id="header">
-        
-            <!--LOGO-->
-            
-            <div id="logo" style="margin:1em 0pt;" >
-            
 
-            
+            <!--LOGO-->
+
+            <div id="logo" style="margin:1em 0pt;" >
+
+
+
                 <a id="HomeLink" href="/UniboWeb/UniboSearch/Default.aspx"><img src="../sites/unibosearch/images/side_logo.png" alt="UniboSearch" /></a>
             </div>
-            
-            
+
+
             <!--SEARCH FORM-->
-            
+
             <div id="searchForm">
-            
+
                 <!--SWITCH-->
                 <div id="switch">
-                    
+
                             <ul>
                                 <li class="active"><span>Persone</span></li>
                                 <li><a href="/uniboweb/unibosearch/rubrica.aspx?tab=StrutturePanel">Strutture</a></li>
                                 <li><a href="/uniboweb/unibosearch/rubrica.aspx?tab=FullTextPanel">Ricerca libera</a></li>
                             </ul>
-                        
+
                 </div>
-                
-                
+
+
                 <div id="usrInput">
                     <form method="post" action="/uniboweb/unibosearch/rubrica.aspx?tab=PersonePanel&amp;mode=people&amp;query=%2bnome%3aantonio+%2bcognome%3acorradi" id="Form1" class="search">
 <div class="aspNetHidden">
@@ -132,8 +136,8 @@ Cached At : 16:25:54
 	<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
 	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="srk3G9OYX90DodCSdrwgVCRc9a2FXJFxkOEhPl9YOcMkOoZ6Zap0hZ/E2k6W+U8HW/Mbx3JzkE3y+t0QbaRwX44j5YPZm2zaP7pO+xD4G39emWaV1bhlBlz+1y5fIx7ffEaLZUz9Bjeb7UMZGz8sTVUlDtD/ZEQGM4fJsJLQEmUYJMOdKQwCPca73Hg/zsLgIwDT0WOzGoyLfJb/ykqyphkNpuHJHWO5z0bcm1VBvn8=" />
 </div>
-                    
-                            
+
+
 
 
 <div class="filterbyrole">
@@ -152,46 +156,46 @@ Cached At : 16:25:54
 </div>
 
 <table>
-    <tbody>            
-                       
+    <tbody>
 
-	
-    
+
+
+
         <tr>
             <td style="width:45%">
                 <div onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;PersoneForm1_SearchButton&#39;)">
-	
+
                     <label for="PersoneForm1_SurnameField" class="screenreaders-helpers">Cognome</label>
                     <div class="borderd">
                     <input name="PersoneForm1$SurnameField" type="text" value="corradi" id="PersoneForm1_SurnameField" oninput="javascript:$(&#39;#resetSurname&#39;).toggle(!($(this).val() == &#39;&#39;));" placeholder="Cognome" />
                     <span><a id="resetSurname" tabindex="-1" style='display:block' href="#" class="nobottom-border" title="Cancella" onclick="javascript:$('#PersoneForm1_SurnameField').val('');$(this).hide();"><div class="is-depletable"></div></a></span>
                     </div>
-                
+
 </div>
             </td>
             <td style="width:45%">
                 <div onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;PersoneForm1_SearchButton&#39;)">
-	
+
                     <label for="PersoneForm1_NameField" class="screenreaders-helpers">Nome</label>
                     <div class="borderd">
                     <input name="PersoneForm1$NameField" type="text" value="antonio" id="PersoneForm1_NameField" oninput="javascript:$(&#39;#resetName&#39;).toggle(!($(this).val() == &#39;&#39;));" placeholder="Nome" />
                     <span><a id="resetName" tabindex="-1" style='display:block' href="#" class="nobottom-border" title="Cancella" onclick="javascript:$('#PersoneForm1_NameField').val('');$(this).hide();"><div class="is-depletable"></div></a></span>
                     </div>
-                
+
 </div>
             </td>
             <td style="width:10%;vertical-align:bottom;"><input type="image" name="PersoneForm1$SearchButton" id="PersoneForm1_SearchButton" src="/UniboWeb/Resources/UniboSearch/images/searchButton.png" alt="Cerca" /></td>
         </tr>
-    
+
 
     </tbody>
-</table>	
-					
+</table>
+
 <div id="advancedSearchLink">
     <ul><li><a id="PersoneForm1_FormLink" href="/uniboweb/unibosearch/rubrica.aspx?tab=PersonePanel&amp;mode=advanced">Ricerca alfabetica</a></li></ul>
 </div>
-                        
-                    
+
+
 <script type="text/javascript">
 //<![CDATA[
 var theForm = document.forms['Form1'];
@@ -212,29 +216,29 @@ function __doPostBack(eventTarget, eventArgument) {
 <script src="/UniboWeb/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZBclabRlTOgEgRuVrbXCtgvzr-3cX0rLF70bHHt-3cwTEIx7deLXA878GFIgRuwamg2&amp;t=638628279619783110" type="text/javascript"></script>
 </form>
                 </div>
-                
-            </div>
-            
-            
-            
-            <!-- SCHEDA -->
-            
-            
-            
-            <!--DIRECTORY RESULTS-->
-            
-    
 
-    
+            </div>
+
+
+
+            <!-- SCHEDA -->
+
+
+
+            <!--DIRECTORY RESULTS-->
+
+
+
+
     <!--INFO BAR-->
 	<div id="dirInfoBar">
 		<span id="PersoneResults_RisultatiRicerca"><strong>1</strong> risultati per <strong>antonio corradi</strong></span>
 	</div>
-	
-        
-    
-    <div id="results">                     				
-        
+
+
+
+    <div id="results">
+
 
 
 
@@ -242,17 +246,17 @@ function __doPostBack(eventTarget, eventArgument) {
 <div class="pages" id="pages_before">
     <ul>
         <li class="currentPageNumber">Pagina: </li>
-        
+
                 <li><strong>1</strong></li>
-            
+
         <li class="totalPageNumber"> &nbsp; di &nbsp; 1</li>
     </ul>
 </div>
 
 
-        
+
         <!-- Risultati da Persone -->
-        
+
                 <table class="contact vcard">
                     <tbody>
                         <tr>
@@ -266,16 +270,16 @@ function __doPostBack(eventTarget, eventArgument) {
                             </td>
                         </tr>
 
-                        
-                        
-                        
+
+
+
 
                         <tr>
                             <th>e-mail</th>
                             <td><a class="email" title='Scrivi una mail' href="mailto:antonio.corradi@unibo.it">antonio.corradi@unibo.it</a></td>
                         </tr>
-                        
-                        
+
+
                                     <tr>
                                         <th>tel</th>
                                         <td class="tel">
@@ -284,17 +288,17 @@ function __doPostBack(eventTarget, eventArgument) {
                                             <span class="value"><a class="phone" href="tel:+39 051 20 9 3083">+39 051 20 9 3083</a></span>
                                         </td>
                                     </tr>
-                                
+
                                 <!-- Sito Web Docente -->
-                                
+
                                 <tr>
 	                                <th>web</th>
 		                            <td>
 		                                <a class="url" href='/sitoweb/antonio.corradi'>https://www.unibo.it/sitoweb/antonio.corradi</a>
 		                            </td>
 	                            </tr>
-	                            
-                            
+
+
                                 <tr>
                                     <th>vcard</th>
                                     <td>
@@ -303,11 +307,11 @@ function __doPostBack(eventTarget, eventArgument) {
                                         </a>
                                     </td>
                                 </tr>
-                            
+
                     </tbody>
                 </table>
-               
-            
+
+
 
 
 
@@ -315,29 +319,29 @@ function __doPostBack(eventTarget, eventArgument) {
 <div class="pages" id="pages_after">
     <ul>
         <li class="currentPageNumber">Pagina: </li>
-        
+
                 <li><strong>1</strong></li>
-            
+
         <li class="totalPageNumber"> &nbsp; di &nbsp; 1</li>
     </ul>
 </div>
 
-    
+
     </div>
-    
 
 
 
-            
+
+
         </div>
-        
-        
+
+
         <!--FOOTER-->
         <div id="footer">
-            
 
 
-<p>&copy; 2025 - Universit&agrave; di Bologna - 
+
+<p>&copy; 2025 - Universit&agrave; di Bologna -
 
     <a target="_blank" style="color:#bbb" href="https://www.unibo.it/it/ateneo/privacy-e-note-legali/privacy/informative-sul-trattamento-dei-dati-personali">Privacy</a> |
     <a href="#" style="color:#bbb" data-cc-open="">Impostazioni Cookie</a>
@@ -365,7 +369,7 @@ function __doPostBack(eventTarget, eventArgument) {
         <p><img src="//analytics.unibo.it/piwik.php?idsite=10875" style="border: 0;" alt="" /></p>
     </noscript>
     <!-- End Piwik Code -->
-        
+
 </body>
 </html>
 

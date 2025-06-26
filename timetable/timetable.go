@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 - 2024 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+//
+// SPDX-License-Identifier: MIT
+
 /*
 Package timetable provides methods to retrieve the timetable of a degree.
 
