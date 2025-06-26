@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/karlseguin/ccache/v3"
 	"github.com/spf13/cobra"
 
 	"github.com/cartabinaria/unibo-go/exams"
@@ -32,6 +33,8 @@ func init() {
 	rootCmd.AddCommand(examsCmd)
 	examsCmd.Flags().StringVarP(&outputFmt, "format", "f", "human", "output format (human, csv)")
 }
+
+var contacts = ccache.New(ccache.Configure[[]rubrica.Contact]().MaxSize(1000))
 
 func runExams(cmd *cobra.Command, args []string) {
 	if outputFmt != "human" && outputFmt != "csv" {

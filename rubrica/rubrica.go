@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/antchfx/htmlquery"
-	"github.com/karlseguin/ccache/v3"
 )
 
 type Contact struct {
@@ -22,25 +21,19 @@ type Contact struct {
 	WebSite   string
 }
 
-type Contacts []Contact
+// These are declared as variables to allow for easier testing and mocking
+var (
+	baseUrl    = "https://www.unibo.it/uniboweb/unibosearch/rubrica.aspx?tab=PersonePanel&mode=people&query="
+	httpClient = &http.Client{}
+)
 
-var baseUrl = "https://www.unibo.it/uniboweb/unibosearch/rubrica.aspx?tab=PersonePanel&mode=people&query="
-
-var searchCache = ccache.New(ccache.Configure[Contacts]().MaxSize(1000))
-
-func Search(firstName, lastName string) (Contacts, error) {
+func Search(firstName, lastName string) ([]Contact, error) {
 	url := baseUrl
 	if firstName != "" {
 		url += "+nome:" + firstName
 	}
 	if lastName != "" {
 		url += "+cognome:" + lastName
-	}
-
-	// try cache
-	item := searchCache.Get(url)
-	if item != nil {
-		return item.Value(), nil
 	}
 
 	res, err := http.Get(url)
@@ -59,7 +52,7 @@ func Search(firstName, lastName string) (Contacts, error) {
 		return nil, nil
 	}
 
-	var contacts Contacts
+	var contacts []Contact
 	for _, table := range tables {
 		fullName := htmlquery.FindOne(table, "//td[@class='fn name']")
 		// split on ,
@@ -81,9 +74,6 @@ func Search(firstName, lastName string) (Contacts, error) {
 		})
 
 	}
-
-	// cache
-	searchCache.Set(url, contacts, 0)
 
 	return contacts, nil
 }
