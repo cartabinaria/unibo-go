@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+# SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
+
 name: CI
 
 permissions:

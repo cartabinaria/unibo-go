@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+
 // Package curriculum contains functions to fetch curricula from the unibo
 // website
 package curriculum
