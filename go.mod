@@ -12,7 +12,7 @@ toolchain go1.24.4
 require (
 	github.com/antchfx/htmlquery v1.3.5
 	github.com/fatih/color v1.18.0
-	github.com/karlseguin/ccache/v3 v3.0.7
+	github.com/karlseguin/ccache/v3 v3.0.8
 	github.com/spf13/cobra v1.10.2
 )
 
