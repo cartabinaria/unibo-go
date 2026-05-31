@@ -22,6 +22,14 @@ import (
 var examsCmd = &cobra.Command{
 	Use:     "exams courseType courseId [subjectRegex]",
 	Short:   "Get the exams for a degree",
+	Long: `Get the exams for a degree.
+The courseType and courseId can be obtained from the course URL:
+https://corsi.unibo.it/courseType/courseId/
+
+Example:
+For https://corsi.unibo.it/magistrale/ingegneriainformatica/
+courseType = magistrale
+courseId = ingegneriainformatica`,
 	Aliases: []string{"e"},
 	Args:    cobra.RangeArgs(2, 3),
 

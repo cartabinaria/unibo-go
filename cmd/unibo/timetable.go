@@ -15,8 +15,16 @@ import (
 )
 
 var cmdTimetable = &cobra.Command{
-	Use:     "timetable courseType courseId year [curriculum]",
-	Short:   "fetches the timetable of a degree course",
+	Use:   "timetable courseType courseId year [curriculum]",
+	Short: "fetches the timetable of a degree course",
+	Long: `fetches the timetable of a degree course.
+The courseType and courseId can be obtained from the course URL:
+https://corsi.unibo.it/courseType/courseId/
+
+Example:
+For https://corsi.unibo.it/magistrale/ingegneriainformatica/
+courseType = magistrale
+courseId = ingegneriainformatica`,
 	Example: "unibo timetable laurea informatica 1",
 	Aliases: []string{"t", "tt"},
 	Args: func(cmd *cobra.Command, args []string) error {
