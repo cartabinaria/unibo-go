@@ -6,6 +6,7 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"regexp"
 	"strings"
 	"time"
@@ -31,13 +32,13 @@ var outputFmt string
 
 func init() {
 	rootCmd.AddCommand(examsCmd)
-	examsCmd.Flags().StringVarP(&outputFmt, "format", "f", "human", "output format (human, csv)")
+	examsCmd.Flags().StringVarP(&outputFmt, "format", "f", "human", "output format (human, csv, json)")
 }
 
 var contacts = ccache.New(ccache.Configure[[]rubrica.Contact]().MaxSize(1000))
 
 func runExams(cmd *cobra.Command, args []string) {
-	if outputFmt != "human" && outputFmt != "csv" {
+	if outputFmt != "human" && outputFmt != "csv" && outputFmt != "json" {
 		Errorln("invalid output format:", outputFmt)
 		return
 	}
@@ -80,19 +81,17 @@ func runExams(cmd *cobra.Command, args []string) {
 	grayFmt := color.New(color.FgHiBlack).SprintFunc()
 	yellowFmt := color.New(color.FgYellow).SprintFunc()
 
-	if outputFmt == "human" {
-		printToConsole(cmd, subjects, greenFmt, grayFmt, yellowFmt, e)
-	} else if outputFmt == "csv" {
-		// map to CSV entries
-		type csvEntry struct {
-			Subject      string
-			Teacher      string
-			TeacherEmail string
-			Date         string
-			Location     string
-		}
+	type entry struct {
+		Subject      string `json:"subject"`
+		Teacher      string `json:"teacher"`
+		TeacherEmail string `json:"teacher_email,omitempty"`
+		Date         string `json:"date"`
+		Location     string `json:"location"`
+		Type         string `json:"type"`
+	}
 
-		var csvEntries []csvEntry
+	var entries []entry
+	if outputFmt == "csv" || outputFmt == "json" {
 		for _, exam := range e {
 			names := strings.Split(exam.Teacher, " ")
 			numNames := len(names)
@@ -116,11 +115,20 @@ func runExams(cmd *cobra.Command, args []string) {
 			var teacherEmail string
 
 			// lookup teacher email
-			contact, err := rubrica.Search(firstName, lastName)
-			if err != nil {
-				Errorln(err)
-				return
-			} else if len(contact) > 1 {
+			var contact []rubrica.Contact
+			cacheKey := firstName + " " + lastName
+			if item := contacts.Get(cacheKey); item != nil {
+				contact = item.Value()
+			} else {
+				contact, err = rubrica.Search(firstName, lastName)
+				if err != nil {
+					Errorln(err)
+					return
+				}
+				contacts.Set(cacheKey, contact, time.Hour)
+			}
+
+			if len(contact) > 1 {
 				cmd.PrintErrln("multiple contacts found for teacher", exam.Teacher)
 				// do not set teacherEmail
 			} else if len(contact) == 0 {
@@ -130,20 +138,33 @@ func runExams(cmd *cobra.Command, args []string) {
 				teacherEmail = contact[0].Email
 			}
 
-			csvEntries = append(csvEntries, csvEntry{
+			entries = append(entries, entry{
 				Subject:      exam.SubjectName,
 				Teacher:      exam.Teacher,
 				TeacherEmail: teacherEmail,
 				Date:         exam.Date.Format(time.DateTime),
 				Location:     exam.Location,
+				Type:         exam.Type,
 			})
 		}
+	}
 
+	switch outputFmt {
+	case "human":
+		printToConsole(cmd, subjects, greenFmt, grayFmt, yellowFmt, e)
+	case "csv":
 		// print CSV header
 		writer := csv.NewWriter(cmd.OutOrStdout())
-		_ = writer.Write([]string{"Subject", "Teacher", "TeacherEmail", "Date", "Location"})
-		for _, entry := range csvEntries {
-			_ = writer.Write([]string{entry.Subject, entry.Teacher, entry.TeacherEmail, entry.Date, entry.Location})
+		_ = writer.Write([]string{"Subject", "Teacher", "TeacherEmail", "Date", "Location", "Type"})
+		for _, e := range entries {
+			_ = writer.Write([]string{e.Subject, e.Teacher, e.TeacherEmail, e.Date, e.Location, e.Type})
+		}
+		writer.Flush()
+	case "json":
+		encoder := json.NewEncoder(cmd.OutOrStdout())
+		encoder.SetIndent("", "  ")
+		if err := encoder.Encode(entries); err != nil {
+			cmd.PrintErrln(err)
 		}
 	}
 }
@@ -151,9 +172,9 @@ func runExams(cmd *cobra.Command, args []string) {
 func printToConsole(
 	cmd *cobra.Command,
 	subjects map[string][]exams.Exam,
-	greenFmt func(a ...interface{}) string,
-	grayFmt func(a ...interface{}) string,
-	yellowFmt func(a ...interface{}) string,
+	greenFmt func(a ...any) string,
+	grayFmt func(a ...any) string,
+	yellowFmt func(a ...any) string,
 	e []exams.Exam,
 ) {
 
